@@ -1,7 +1,9 @@
 import { Router } from 'express';
+import { AuthRoutes } from '../modules/Auth/auth.route';
+import { BidRoutes } from '../modules/Bid/bid.route';
+import { CarRoutes } from '../modules/Car/car.route';
+import { RentRoutes } from '../modules/Rent/rent.route';
 import { UserRoutes } from '../modules/User/user.route';
-import { ServiceRoutes } from '../modules/Service/service.route';
-import { IssueRoutes } from '../modules/Issue/issue.route';
 
 type TModuleRoutes = {
   path: string;
@@ -16,12 +18,20 @@ const moduleRoutes: TModuleRoutes[] = [
     route: UserRoutes,
   },
   {
-    path: '/services',
-    route: ServiceRoutes,
+    path: '/cars',
+    route: CarRoutes,
   },
   {
-    path: '/issues',
-    route: IssueRoutes,
+    path: '/bids',
+    route: BidRoutes,
+  },
+  {
+    path: '/auth',
+    route: AuthRoutes,
+  },
+  {
+    path: '/rents',
+    route: RentRoutes,
   },
 ];
 

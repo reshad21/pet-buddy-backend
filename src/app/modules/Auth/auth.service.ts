@@ -10,7 +10,7 @@ import { USER_ROLE } from '../User/user.utils';
 
 const loginUser = async (payload: TLoginUser) => {
   // checking if the user is exist
-  const user = await User.findOneAndReplace({ email: payload.email });
+  const user = await User.findOne({ email: payload.email });
 
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');

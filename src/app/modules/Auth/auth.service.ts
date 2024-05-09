@@ -2,12 +2,12 @@ import httpStatus from 'http-status';
 import config from '../../config';
 import AppError from '../../errors/AppError';
 
+import bcryptJs from 'bcryptjs';
+import { IUser } from '../User/user.interface';
 import { User } from '../User/user.model';
+import { USER_ROLE } from '../User/user.utils';
 import { TLoginUser } from './auth.interface';
 import { createToken, verifyToken } from './auth.utils';
-import { IUser } from '../User/user.interface';
-import { USER_ROLE } from '../User/user.utils';
-import bcryptJs from 'bcryptjs';
 
 const loginUser = async (payload: TLoginUser) => {
   // checking if the user is exist
@@ -18,7 +18,8 @@ const loginUser = async (payload: TLoginUser) => {
   }
   // checking if the user is already deleted
 
-  const isPasswordMatched = bcryptJs.compare(payload.password, user.password);
+  const isPasswordMatched = await bcryptJs.compare(payload.password, user.password);
+  
   if (!isPasswordMatched) {
     throw new AppError(httpStatus.NOT_FOUND, 'Password Incorrect!');
   }
@@ -84,8 +85,6 @@ const registerUser = async (userData: IUser) => {
     ...userData,
     role: USER_ROLE.user,
   });
-
-  delete (user as Partial<IUser>).password;
 
   return user;
 };

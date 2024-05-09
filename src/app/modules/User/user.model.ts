@@ -24,6 +24,7 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    
   },
   role: {
     type: String,
@@ -34,5 +35,6 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
   rating: { type: Number, default: 0 },
   rents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rent' }],
 });
+
 
 export const User = mongoose.model<IUser>('User', userSchema);

@@ -7,6 +7,7 @@ import { TLoginUser } from './auth.interface';
 import { createToken, verifyToken } from './auth.utils';
 import { IUser } from '../User/user.interface';
 import { USER_ROLE } from '../User/user.utils';
+import bcryptJs from 'bcryptjs';
 
 const loginUser = async (payload: TLoginUser) => {
   // checking if the user is exist
@@ -16,6 +17,11 @@ const loginUser = async (payload: TLoginUser) => {
     throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
   }
   // checking if the user is already deleted
+
+  const isPasswordMatched = bcryptJs.compare(payload.password, user.password);
+  if (!isPasswordMatched) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Password Incorrect!');
+  }
 
   const jwtPayload = {
     email: user.email,
@@ -69,11 +75,19 @@ const refreshToken = async (token: string) => {
   };
 };
 
-const registerUser = async (user: IUser) => {
-  return await User.create({
-    ...user,
+const registerUser = async (userData: IUser) => {
+  userData.password = await bcryptJs.hash(
+    userData.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  const user = await User.create({
+    ...userData,
     role: USER_ROLE.user,
   });
+
+  delete (user as Partial<IUser>).password;
+
+  return user;
 };
 export const AuthServices = {
   loginUser,

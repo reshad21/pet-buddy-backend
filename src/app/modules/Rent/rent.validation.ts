@@ -2,10 +2,8 @@ import { z } from 'zod';
 
 export const createRentValidationSchema = z.object({
   body: z.object({
-    user: z.string(), // Assuming user is represented by a string (e.g., user ID)
-    driver: z.string(), // Assuming driver is represented by a string (e.g., driver ID)
+    user: z.string(), // Assuming user is represented by a string (e.g., user ID)// Assuming driver is represented by a string (e.g., driver ID)
     car: z.string(), // Assuming car is represented by a string (e.g., car ID)
-    rentStatus: z.enum(['pending', 'ongoing', 'completed']),
     startingPoint: z.string(),
     destination: z.string(),
   }),

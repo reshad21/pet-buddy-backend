@@ -1,4 +1,5 @@
 import QueryBuilder from '../../builder/QueryBuilder';
+import { Rent } from '../Rent/rent.model';
 import { IBid } from './bid.interface';
 import { Bid } from './bid.model';
 
@@ -30,7 +31,18 @@ const updateBidById = async (bidId: string, payload: Partial<IBid>) => {
     new: true,
     runValidators: true,
   });
-  return result;
+  if (result?.bidStatus === 'accepted') {
+    const newResult = await Rent.findByIdAndUpdate(
+      { _id: result.rentId },
+      { rentStatus: 'ongoing' },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+    return newResult
+  }
+  return result
 };
 
 const deleteBidById = async (bidId: string) => {

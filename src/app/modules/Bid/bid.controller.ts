@@ -40,6 +40,7 @@ const getAllBids = catchAsync(async (req, res) => {
 
 const updateBidById = catchAsync(async (req, res) => {
   const { id } = req.params;
+
   const result = await BidService.updateBidById(id, req.body);
 
   sendResponse(res, {

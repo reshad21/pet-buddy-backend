@@ -4,7 +4,7 @@ export const createUserValidationSchema = z.object({
   body: z.object({
     name: z.string(),
     email: z.string().email(),
-    password: z.string(),
+    password: z.string().optional(),
     role: z.enum(['admin', 'driver', 'customer']).optional(), // Updated to match schema
     img: z.string().optional(), // Updated to match schema
     rating: z.number().optional(), // Updated to match schema

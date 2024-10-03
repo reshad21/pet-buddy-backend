@@ -11,6 +11,4 @@ export interface IPost extends Document {
     upvotes: number;
     downvotes: number;
     comments: Types.ObjectId[]; // Use ObjectId[] for an array of ObjectIds
-    createdAt: Date;
-    updatedAt: Date;
 }

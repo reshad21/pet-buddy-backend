@@ -14,15 +14,13 @@ const router = Router();
 
 const moduleRoutes: TModuleRoutes[] = [
   {
-    path: '/users',
-    route: UserRoutes,
-  },
-
-  {
     path: '/auth',
     route: AuthRoutes,
   },
-
+  {
+    path: '/users',
+    route: UserRoutes,
+  },
   {
     path: '/comments',
     route: CommentRoutes,

@@ -44,14 +44,6 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
       ref: 'Post', // Reference to the Post model
     },
   ],
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
 });
 
 // Create and export User model

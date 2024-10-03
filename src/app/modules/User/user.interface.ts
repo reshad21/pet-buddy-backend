@@ -11,6 +11,4 @@ export interface IUser extends Document {
   followers?: Types.ObjectId[];
   following?: Types.ObjectId[];
   posts?: Types.ObjectId[];
-  createdAt?: Date;
-  updatedAt?: Date;
 }

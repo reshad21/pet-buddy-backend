@@ -2,36 +2,57 @@
 // models/User.ts
 import mongoose, { Schema } from 'mongoose';
 import { IUser } from './user.interface';
-import { validateEmail } from './user.utils';
 
+// Define the User schema
 const userSchema: Schema<IUser> = new mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
   },
-  email: {
-    type: String,
-    trim: true,
-    lowercase: true,
-    unique: true,
-    required: true,
-    validate: [validateEmail, 'Please fill a valid email address'],
-    match: [
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      'Please fill a valid email address',
-    ],
-  },
-  password: {
-    type: String,
+  profilePicture: {
+    type: String, // URL of profile picture
   },
   role: {
     type: String,
-    enum: ['admin', 'user'],
+    enum: ['user', 'admin'],
     default: 'user',
   },
-  img: { type: String },
-  rating: { type: Number, default: 0 },
-  rents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rent' }],
+  followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User', // Reference to the User model
+    },
+  ],
+  following: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User', // Reference to the User model
+    },
+  ],
+  posts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Post', // Reference to the Post model
+    },
+  ],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
+// Create and export User model
 export const User = mongoose.model<IUser>('User', userSchema);

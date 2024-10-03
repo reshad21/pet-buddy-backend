@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import { AuthRoutes } from '../modules/Auth/auth.route';
-import { RentRoutes } from '../modules/Rent/rent.route';
+import { CommentRoutes } from '../modules/Comment/comment.route';
+import { PostRoutes } from '../modules/Post/post.route';
 import { UserRoutes } from '../modules/User/user.route';
+import { VoteRoutes } from '../modules/Vote/vote.route';
 
 type TModuleRoutes = {
   path: string;
@@ -20,9 +22,18 @@ const moduleRoutes: TModuleRoutes[] = [
     path: '/auth',
     route: AuthRoutes,
   },
+
   {
-    path: '/rents',
-    route: RentRoutes,
+    path: '/comments',
+    route: CommentRoutes,
+  },
+  {
+    path: '/post',
+    route: PostRoutes,
+  },
+  {
+    path: '/vote',
+    route: VoteRoutes,
   },
 ];
 

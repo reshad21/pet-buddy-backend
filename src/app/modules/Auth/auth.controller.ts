@@ -29,6 +29,7 @@ const refreshToken = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
 const registerUser = catchAsync(async (req, res) => {
   const result = await AuthServices.registerUser(req.body);
 

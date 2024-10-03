@@ -1,12 +1,12 @@
 import express from 'express';
+import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
 import { UserController } from './user.controller';
+import { USER_ROLE } from './user.utils';
 import {
   createUserValidationSchema,
   updateUserValidationSchema,
 } from './user.validation';
-import auth from '../../middlewares/auth';
-import { USER_ROLE } from './user.utils';
 
 const router = express.Router();
 
@@ -21,7 +21,7 @@ router.get('/', auth(USER_ROLE.admin), UserController.getAllUsers);
 
 router.get(
   '/:id',
-  auth(USER_ROLE.admin, USER_ROLE.driver, USER_ROLE.user),
+  auth(USER_ROLE.admin, USER_ROLE.user),
   UserController.findUserById,
 );
 

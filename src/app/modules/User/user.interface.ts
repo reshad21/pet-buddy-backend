@@ -6,6 +6,6 @@ export interface IUser {
   rating: number;
   email: string;
   password: string;
-  role: 'admin' | 'user' | 'driver';
+  role: 'admin' | 'user';
   rents: Types.ObjectId;
 }

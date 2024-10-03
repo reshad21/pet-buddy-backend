@@ -36,7 +36,9 @@ const loginUser = async (payload: TLoginUser) => {
       accessToken,
       refreshToken,
     };
-  } else {
+
+  }
+  else {
     if (payload.password) {
       const isPasswordMatched = await bcryptJs.compare(
         payload.password,
@@ -116,6 +118,7 @@ const registerUser = async (userData: TLoginUser) => {
 
   return user;
 };
+
 export const AuthServices = {
   loginUser,
   refreshToken,

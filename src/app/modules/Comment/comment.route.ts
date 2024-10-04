@@ -9,7 +9,7 @@ const router = express.Router();
 
 // Create a new post (User only)
 router.post(
-    '/',
+    '/:postId',
     auth(USER_ROLE.user),
     // validateRequest(commentValidationSchema),
     CommentController.createComment

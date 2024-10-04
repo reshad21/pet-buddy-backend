@@ -5,7 +5,8 @@ import { CommentService } from './comment.service';
 
 
 const createComment = catchAsync(async (req, res) => {
-    const result = await CommentService.createCommentIntoDB(req.body);
+    const { postId } = req.params;
+    const result = await CommentService.createCommentIntoDB(req.body, postId);
 
     sendResponse(res, {
         statusCode: httpStatus.CREATED,

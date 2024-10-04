@@ -1,9 +1,9 @@
 import express from 'express';
 import auth from '../../middlewares/auth';
-import validateRequest from '../../middlewares/validateRequest';
+// import validateRequest from '../../middlewares/validateRequest';
 import { USER_ROLE } from '../User/user.utils';
 import { CommentController } from './comment.controller';
-import { commentValidationSchema } from './comment.validation';
+// import { commentValidationSchema } from './comment.validation';
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ const router = express.Router();
 router.post(
     '/',
     auth(USER_ROLE.user),
-    validateRequest(commentValidationSchema),
+    // validateRequest(commentValidationSchema),
     CommentController.createComment
 );
 

@@ -1,55 +1,70 @@
-import QueryBuilder from '../../builder/QueryBuilder';
-import { IVote } from './vote.interface';
+
+import mongoose from 'mongoose';
+import { Post } from '../Post/post.model';
 import { Vote } from './vote.model';
 
-// Create a new vote
-const createVoteIntoDB = async (vote: IVote) => {
-    return await Vote.create(vote);
+const createUpVote = async (userId: string, postId: string) => {
+    // Check if the user has already voted on this post
+    const existingVote = await Vote.findOne({ user: userId, post: postId });
+
+    if (existingVote) {
+        if (existingVote.voteType === 'Upvote') {
+            throw new Error('Already upvoted');
+        } else {
+            // Change the vote from Downvote to Upvote
+            existingVote.voteType = 'Upvote';
+            await existingVote.save();
+
+            // Update the post: Increment upvotes by 1, decrement downvotes by 1
+            await Post.findByIdAndUpdate(postId, { $inc: { upvotes: 1, downvotes: -1 } });
+        }
+    } else {
+        // Create a new upvote
+        const newVote = new Vote({
+            user: new mongoose.Types.ObjectId(userId),
+            post: new mongoose.Types.ObjectId(postId),
+            voteType: 'Upvote',
+        });
+        await newVote.save();
+
+        // Increment upvotes by 1
+        await Post.findByIdAndUpdate(postId, { $inc: { upvotes: 1 } });
+    }
 };
 
-// Find a vote by its ID
-const findVoteByIdIntoDB = async (voteId: string) => {
-    return await Vote.findById(voteId)
-        .populate('user', 'name email') // Populate user details
-        .populate('post'); // Populate post details
+
+const createDownVote = async (userId: string, postId: string) => {
+    // Check if the user has already voted on this post
+    const existingVote = await Vote.findOne({ user: userId, post: postId });
+
+    if (existingVote) {
+        if (existingVote.voteType === 'Downvote') {
+            throw new Error('Already downvoted');
+        } else {
+            // Change the vote from Upvote to Downvote
+            existingVote.voteType = 'Downvote';
+            await existingVote.save();
+
+            // Update the post: Increment downvotes by 1, decrement upvotes by 1
+            await Post.findByIdAndUpdate(postId, { $inc: { downvotes: 1, upvotes: -1 } });
+        }
+    } else {
+        // Create a new downvote
+        const newVote = new Vote({
+            user: new mongoose.Types.ObjectId(userId),
+            post: new mongoose.Types.ObjectId(postId),
+            voteType: 'Downvote',
+        });
+        await newVote.save();
+
+        // Increment downvotes by 1
+        await Post.findByIdAndUpdate(postId, { $inc: { downvotes: 1 } });
+    }
 };
 
-// Get all votes with query filtering, sorting, and pagination
-const getAllVotesFromDB = async (query: Record<string, unknown>) => {
-    const voteQuery = new QueryBuilder(Vote.find(), query)
-        .filter()
-        .sort()
-        .paginate()
-        .fields();
 
-    const result = await voteQuery.modelQuery;
-    const metaData = await voteQuery.countTotal();
-    return {
-        meta: metaData,
-        data: result,
-    };
-};
 
-// Update a vote by its ID
-const updateVoteByIdIntoDB = async (voteId: string, payload: Partial<IVote>) => {
-    const result = await Vote.findByIdAndUpdate({ _id: voteId }, payload, {
-        new: true,
-        runValidators: true,
-    });
-    return result;
-};
-
-// // Delete a vote by its ID
-// const deleteVoteById = async (voteId: string) => {
-//     const result = await Vote.findByIdAndDelete(voteId);
-//     return result;
-// };
-
-// Export all vote services
-export const VoteService = {
-    createVoteIntoDB,
-    findVoteByIdIntoDB,
-    getAllVotesFromDB,
-    updateVoteByIdIntoDB,
-    // deleteVoteById,
+export const voteService = {
+    createUpVote,
+    createDownVote,
 };

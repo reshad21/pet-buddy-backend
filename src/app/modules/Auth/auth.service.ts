@@ -11,14 +11,24 @@ import { createToken, verifyToken } from './auth.utils';
 const loginUser = async (payload: TLoginUser) => {
   // checking if the user exists
   const user = await User.findOne({ email: payload.email });
+  console.log("login user information--->", user);
 
   if (!user) {
     throw new Error('User does not exist');
   }
 
   const jwtPayload = {
+    _id: user._id,
+    name: user.name,
     email: user.email,
+    mobileNumber: user.mobileNumber,
+    img: user.img,
     role: user.role,
+    status: user.status,
+    followers: user.followers,
+    following: user.following,
+    posts: user.posts,
+    __v: user.__v,
   };
 
   const accessToken = createToken(

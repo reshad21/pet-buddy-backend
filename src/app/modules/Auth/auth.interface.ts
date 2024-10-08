@@ -1,6 +1,13 @@
+
 export type TLoginUser = {
-  name: string;
-  img: string;
   email: string;
-  password?: string;
+  password: string;
+};
+
+export type TRegisterUser = {
+  name: string;
+  email: string;
+  mobileNumber: string;
+  password: string;
+  role: 'user' | 'admin';
 };

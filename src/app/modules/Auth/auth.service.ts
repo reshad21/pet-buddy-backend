@@ -9,71 +9,36 @@ import { TLoginUser } from './auth.interface';
 import { createToken, verifyToken } from './auth.utils';
 
 const loginUser = async (payload: TLoginUser) => {
-  // checking if the user is exist
+  // checking if the user exists
   const user = await User.findOne({ email: payload.email });
 
   if (!user) {
-    const user = await registerUser(payload);
-
-    const jwtPayload = {
-      email: user.email,
-      role: user.role,
-    };
-
-    const accessToken = createToken(
-      jwtPayload,
-      config.jwt_access_secret as string,
-      config.jwt_access_expires_in as string,
-    );
-
-    const refreshToken = createToken(
-      jwtPayload,
-      config.jwt_refresh_secret as string,
-      config.jwt_refresh_expires_in as string,
-    );
-
-    return {
-      accessToken,
-      refreshToken,
-    };
-
+    throw new Error('User does not exist');
   }
-  else {
-    if (payload.password) {
-      const isPasswordMatched = await bcryptJs.compare(
-        payload.password,
-        user.password,
-      );
 
-      if (!isPasswordMatched) {
-        throw new AppError(httpStatus.NOT_FOUND, 'Password Incorrect!');
-      }
-    }
-    const jwtPayload = {
-      email: user.email,
-      role: user.role,
-      _id: user._id,
-    };
+  const jwtPayload = {
+    email: user.email,
+    role: user.role,
+  };
 
-    const accessToken = createToken(
-      jwtPayload,
-      config.jwt_access_secret as string,
-      config.jwt_access_expires_in as string,
-    );
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string,
+  );
 
-    const refreshToken = createToken(
-      jwtPayload,
-      config.jwt_refresh_secret as string,
-      config.jwt_refresh_expires_in as string,
-    );
+  const refreshToken = createToken(
+    jwtPayload,
+    config.jwt_refresh_secret as string,
+    config.jwt_refresh_expires_in as string,
+  );
 
-    return {
-      accessToken,
-      refreshToken,
-    };
-  }
-  // checking if the user is already deleted
+  return {
+    accessToken,
+    refreshToken,
+  };
 };
+
 
 const refreshToken = async (token: string) => {
   // checking if the given token is valid
@@ -116,7 +81,33 @@ const registerUser = async (userData: TLoginUser) => {
     role: USER_ROLE.user,
   });
 
-  return user;
+  //create token and sent to the  client
+
+  const jwtPayload = {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    mobileNumber: user.mobileNumber,
+    role: user.role,
+    status: user.status,
+  };
+
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string
+  );
+
+  const refreshToken = createToken(
+    jwtPayload,
+    config.jwt_refresh_secret as string,
+    config.jwt_refresh_expires_in as string
+  );
+
+  return {
+    accessToken,
+    refreshToken,
+  };
 };
 
 export const AuthServices = {

@@ -12,19 +12,30 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
   },
   name: {
     type: String,
     required: true,
   },
-  profilePicture: {
+  img: {
     type: String, // URL of profile picture
+  },
+  mobileNumber: {
+    type: String,
+    required: true,
+  },
+  passwordChangedAt: {
+    type: Date,
   },
   role: {
     type: String,
     enum: ['user', 'admin'],
     default: 'user',
+  },
+  status: {
+    type: String,
+    enum: ['normal', 'premium'],
+    default: 'normal',
   },
   followers: [
     {

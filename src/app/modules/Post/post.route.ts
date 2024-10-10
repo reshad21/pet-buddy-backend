@@ -21,7 +21,7 @@ router.post(
 // Get all posts (Both Admin and User)
 router.get(
     '/',
-    auth(USER_ROLE.admin, USER_ROLE.user),
+    // auth(USER_ROLE.admin, USER_ROLE.user),
     PostController.getAllPosts,
 );
 

@@ -6,6 +6,7 @@ import { IPost } from './post.interface';
 const postSchema: Schema<IPost> = new mongoose.Schema({
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     title: { type: String, required: true },
+    postImage: { type: String, required: true },
     content: { type: String, required: true }, // Rich text or markdown content
     category: { type: String, enum: ['Tip', 'Story'], required: true }, // Tip or Story
     isPremium: { type: Boolean, default: false }, // For premium content

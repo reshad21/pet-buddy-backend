@@ -11,7 +11,7 @@ const findPostById = async (postId: string) => {
 };
 
 const getAllPosts = async (query: Record<string, unknown>) => {
-    const postQuery = new QueryBuilder(Post.find(), query)
+    const postQuery = new QueryBuilder(Post.find().populate('author'), query)
         .filter()
         .sort()
         .paginate()

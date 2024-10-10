@@ -1,9 +1,10 @@
+import bcryptJs from 'bcryptjs';
 import QueryBuilder from '../../builder/QueryBuilder';
 import config from '../../config';
 import { UserSearchableFields } from './user.constant';
 import { IUser } from './user.interface';
 import { User } from './user.model';
-import bcryptJs from 'bcryptjs';
+
 const createUser = async (user: IUser) => {
   user.password = await bcryptJs.hash(
     user.password,

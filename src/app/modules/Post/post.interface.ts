@@ -4,6 +4,7 @@ import { Document, Types } from 'mongoose';
 export interface IPost extends Document {
     author: Types.ObjectId; // Use ObjectId instead of string
     title: string;
+    postImage: string;
     content: string;
     category: 'Tip' | 'Story';
     isPremium: boolean;

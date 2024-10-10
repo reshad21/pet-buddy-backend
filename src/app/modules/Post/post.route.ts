@@ -28,7 +28,7 @@ router.get(
 // Get a specific post by ID (Both Admin and User)
 router.get(
     '/:id',
-    auth(USER_ROLE.admin, USER_ROLE.user),
+    // auth(USER_ROLE.admin, USER_ROLE.user),
     PostController.findPostById,
 );
 

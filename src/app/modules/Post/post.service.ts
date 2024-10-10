@@ -7,11 +7,11 @@ const createPost = async (post: IPost) => {
 };
 
 const findPostById = async (postId: string) => {
-    return await Post.findById(postId).populate('author', 'name email').populate('comments');
+    return await Post.findById(postId).populate('author').populate('comments');
 };
 
 const getAllPosts = async (query: Record<string, unknown>) => {
-    const postQuery = new QueryBuilder(Post.find().populate('author'), query)
+    const postQuery = new QueryBuilder(Post.find().populate('author').populate('comments'), query)
         .filter()
         .sort()
         .paginate()

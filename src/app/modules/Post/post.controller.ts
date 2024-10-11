@@ -4,7 +4,7 @@ import sendResponse from '../../utils/sendResponse';
 import { PostService } from './post.service';
 
 const createPost = catchAsync(async (req, res) => {
-    const result = await PostService.createPost(req.body);
+    const result = await PostService.createPost(req.body, req.user);
 
     sendResponse(res, {
         statusCode: httpStatus.CREATED,

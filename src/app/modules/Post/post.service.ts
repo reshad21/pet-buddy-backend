@@ -1,10 +1,34 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import QueryBuilder from '../../builder/QueryBuilder';
+import { User } from '../User/user.model';
 import { IPost } from './post.interface';
 import { Post } from './post.model';
 
-const createPost = async (post: IPost) => {
-    return await Post.create(post);
+const createPost = async (post: IPost, user: any) => {
+    // Find the user by user._id
+    const existingUser = await User.findById(user._id);
+
+    if (!existingUser) {
+        throw new Error("User not found");
+    }
+
+    // Initialize the posts array if it's undefined
+    if (!existingUser.posts) {
+        existingUser.posts = [];
+    }
+
+    // Create the post
+    const createdPost = await Post.create(post);
+
+    // Add the post's _id to the user's posts array
+    existingUser.posts.push(createdPost._id);
+
+    // Save the updated user
+    await existingUser.save();
+
+    return createdPost;
 };
+
 
 const findPostById = async (postId: string) => {
     return await Post.findById(postId).populate('author').populate('comments');

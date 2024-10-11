@@ -43,4 +43,9 @@ router.delete(
   UserController.deleteUserById
 );
 
+router.get(
+  '/posts/:id',
+  UserController.singleUserAllPosts
+);
+
 export const UserRoutes = router;

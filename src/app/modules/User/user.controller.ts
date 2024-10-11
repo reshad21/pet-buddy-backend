@@ -62,10 +62,23 @@ const deleteUserById = catchAsync(async (req, res) => {
   });
 });
 
+const singleUserAllPosts = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await UserService.getSingleUserAllPost(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Get single user posts succesfully',
+    data: result,
+  });
+});
+
 export const UserController = {
   createUser,
   findUserById,
   getAllUsers,
   updateUserById,
   deleteUserById,
+  singleUserAllPosts
 };

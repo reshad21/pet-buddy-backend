@@ -1,6 +1,8 @@
 import bcryptJs from 'bcryptjs';
+import mongoose from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
 import config from '../../config';
+import { Post } from '../Post/post.model';
 import { UserSearchableFields } from './user.constant';
 import { IUser } from './user.interface';
 import { User } from './user.model';
@@ -46,10 +48,20 @@ const deleteUserById = async (userId: string) => {
   return result;
 };
 
+
+const getSingleUserAllPost = async (userId: string) => {
+  const result = await Post.find({
+    author: new mongoose.Types.ObjectId(userId)
+  });
+
+  return result;
+};
+
 export const UserService = {
   createUser,
   findUserById,
   getAllUsers,
   updateUserById,
   deleteUserById,
+  getSingleUserAllPost
 };

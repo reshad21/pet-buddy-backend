@@ -74,11 +74,44 @@ const singleUserAllPosts = catchAsync(async (req, res) => {
   });
 });
 
+
+// Follow a user
+const followUser = catchAsync(async (req, res) => {
+  const { _id } = req.user; // The user ID of the person performing the action
+  const { followId } = req.params; // The ID of the user to follow
+
+  const result = await UserService.followUserIntoBd(_id, followId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User followed successfully',
+    data: result,
+  });
+});
+
+// Unfollow a user
+const unfollowUser = catchAsync(async (req, res) => {
+  const { _id } = req.user; // The user ID of the person performing the action
+  const { unfollowId } = req.params; // The ID of the user to unfollow
+
+  const result = await UserService.unfollowUserIntoDb(_id, unfollowId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User unfollowed successfully',
+    data: result,
+  });
+});
+
 export const UserController = {
   createUser,
   findUserById,
   getAllUsers,
   updateUserById,
   deleteUserById,
-  singleUserAllPosts
+  singleUserAllPosts,
+  followUser,
+  unfollowUser,
 };

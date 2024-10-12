@@ -57,11 +57,77 @@ const getSingleUserAllPost = async (userId: string) => {
   return result;
 };
 
+
+// Follow a User
+const followUserIntoBd = async (userId: string, followId: string) => {
+  console.log("user id==>", userId, "who follow the user==>", followId);
+  try {
+
+    const user = await User.findById(userId);
+    const userToFollow = await User.findById(followId);
+
+    if (!userToFollow) {
+      throw new Error("User to follow not found");
+    }
+
+    // Check if already following
+    if (user?.following?.includes(userToFollow._id)) {
+      throw new Error("You are already following this user");
+    }
+
+    // Add to following and followers lists
+    user?.following?.push(userToFollow._id);
+    userToFollow.followers?.push(user!._id);
+
+    // Save changes directly
+    await user?.save();
+    await userToFollow.save();
+
+    return { message: "User followed successfully" };
+  } catch (error) {
+    console.error("Error in followUserIntoBd:", error);
+    throw new Error("Failed to create follow");
+  }
+};
+
+
+// Unfollow a User
+const unfollowUserIntoDb = async (userId: string, unfollowId: string) => {
+  const user = await User.findById(userId);
+  const userToUnfollow = await User.findById(unfollowId);
+
+  if (!userToUnfollow) {
+    throw new Error("User to unfollow not found");
+  }
+
+  // Check if not following
+  if (!user?.following?.includes(userToUnfollow._id)) {
+    throw new Error("You are not following this user");
+  }
+
+  // Remove from following and followers lists
+  user.following = user.following?.filter(
+    (id) => id.toString() !== unfollowId,
+  );
+  userToUnfollow.followers = userToUnfollow.followers?.filter(
+    (id) => id.toString() !== userId,
+  );
+
+  // Save changes directly
+  await user.save();
+  await userToUnfollow.save();
+
+  return { message: "User unfollowed successfully" };
+};
+
+
 export const UserService = {
   createUser,
   findUserById,
   getAllUsers,
   updateUserById,
   deleteUserById,
-  getSingleUserAllPost
+  getSingleUserAllPost,
+  followUserIntoBd,
+  unfollowUserIntoDb
 };

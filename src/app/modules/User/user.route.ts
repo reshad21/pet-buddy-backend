@@ -48,4 +48,8 @@ router.get(
   UserController.singleUserAllPosts
 );
 
+
+router.post('/follow/:followId', auth(USER_ROLE.user), UserController.followUser);
+router.post('/unfollow/:unfollowId', auth(USER_ROLE.user), UserController.unfollowUser);
+
 export const UserRoutes = router;

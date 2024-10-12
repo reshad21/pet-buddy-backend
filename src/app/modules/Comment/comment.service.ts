@@ -11,19 +11,24 @@ const createCommentIntoDB = async (comment: IComment, postId: string) => {
         const post = await Post.findById(postId);
 
         if (!post) {
-            throw new Error('Post not found');
+            throw new AppError(httpStatus.NOT_FOUND, 'Post not found');
         }
 
         // Create the new comment
         const newComment = await Comment.create(comment);
 
-        // Add the comment's _id to the post's comments array
+        // Add the comment's content to the post's comments array
         post.comments.push(newComment._id);
 
         // Save the updated post
         await post.save();
 
-        return newComment;
+        // Populate the author and post fields with details
+        const populatedComment = await Comment.findById(newComment._id)
+            .populate('author', 'name email img') // Populate author with selected fields
+            .populate('post', 'title'); // Populate post with selected fields
+
+        return populatedComment;
     } catch (error) {
         throw new AppError(httpStatus.FORBIDDEN, "Could not create comment");
     }

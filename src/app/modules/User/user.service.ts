@@ -1,7 +1,9 @@
 import bcryptJs from 'bcryptjs';
+import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
 import config from '../../config';
+import AppError from '../../errors/AppError';
 import { Post } from '../Post/post.model';
 import { UserSearchableFields } from './user.constant';
 import { IUser } from './user.interface';
@@ -67,12 +69,12 @@ const followUserIntoBd = async (userId: string, followId: string) => {
     const userToFollow = await User.findById(followId);
 
     if (!userToFollow) {
-      throw new Error("User to follow not found");
+      throw new AppError(httpStatus.NOT_FOUND, "User to follow not found");
     }
 
     // Check if already following
     if (user?.following?.includes(userToFollow._id)) {
-      throw new Error("You are already following this user");
+      throw new AppError(httpStatus.ALREADY_REPORTED, "You are already following this user");
     }
 
     // Add to following and followers lists

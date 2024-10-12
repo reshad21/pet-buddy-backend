@@ -31,8 +31,36 @@ const downVote = catchAsync(async (req, res) => {
 });
 
 
+const totalUpVote = catchAsync(async (req, res) => {
+    const { postId } = req.params;
+    const result = await voteService.getTotalUpvotes(postId);
+
+    sendResponse(res, {
+        statusCode: httpStatus.CREATED,
+        success: true,
+        message: 'Upvote is get successfully',
+        data: result,
+    });
+});
+
+
+const totalDownVote = catchAsync(async (req, res) => {
+    const { postId } = req.params;
+    const result = await voteService.getTotalDownvotes(postId);
+
+    sendResponse(res, {
+        statusCode: httpStatus.CREATED,
+        success: true,
+        message: 'Downvote is get successfully',
+        data: result,
+    });
+});
+
+
 
 export const VoteController = {
     upVote,
     downVote,
+    totalUpVote,
+    totalDownVote
 };

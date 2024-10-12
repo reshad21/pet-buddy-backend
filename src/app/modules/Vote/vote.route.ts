@@ -15,11 +15,22 @@ router.post(
     VoteController.upVote
 );
 
+router.get(
+    '/upvote/:postId',
+    VoteController.totalUpVote
+);
+
 router.post(
     '/downvote/:postId',
     auth(USER_ROLE.admin, USER_ROLE.user),
     validateRequest(updateVoteValidationSchema),
     VoteController.downVote
+);
+
+
+router.get(
+    '/downvote/:postId',
+    VoteController.totalDownVote
 );
 
 

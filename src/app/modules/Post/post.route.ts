@@ -43,7 +43,7 @@ router.patch(
 // Delete a post by ID (Admin only)
 router.delete(
     '/:id',
-    auth(USER_ROLE.admin),
+    auth(USER_ROLE.admin, USER_ROLE.user),
     PostController.deletePostById,
 );
 

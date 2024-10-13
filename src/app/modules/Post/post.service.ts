@@ -35,7 +35,9 @@ const findPostById = async (postId: string) => {
 };
 
 const getAllPosts = async (query: Record<string, unknown>) => {
+    const contentSearchableFields = ['title', 'content', 'category'];
     const postQuery = new QueryBuilder(Post.find().populate('author').populate('comments'), query)
+        .search(contentSearchableFields)
         .filter()
         .sort()
         .paginate()

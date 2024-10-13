@@ -16,7 +16,7 @@ export const updatePostValidationSchema = z.object({
     body: z.object({
         author: z.string().optional(), // Assuming author is represented by a string (e.g., user ID)
         title: z.string().optional(),
-        postImage: z.string(),
+        postImage: z.string().optional(),
         content: z.string().optional(), // Can be rich text or markdown
         category: z.enum(['Tip', 'Story']).optional(),
         isPremium: z.boolean().optional(),

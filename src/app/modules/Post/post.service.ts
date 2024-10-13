@@ -49,13 +49,13 @@ const getAllPosts = async (query: Record<string, unknown>) => {
     };
 };
 
-const updatePostById = async (postId: string, payload: Partial<IPost>) => {
-    const result = await Post.findByIdAndUpdate({ _id: postId }, payload, {
+const updatePostById = async (payload: Partial<IPost>, id: string) => {
+    const result = await Post.findByIdAndUpdate(id, payload, {
         new: true,
         runValidators: true,
     });
     return result;
-};
+}
 
 const deletePostById = async (postId: string) => {
     const result = await Post.findByIdAndDelete(postId);

@@ -34,7 +34,7 @@ router.get(
 
 // Update a post by ID (User and Admin)
 router.patch(
-    '/:id',
+    '/:postId',
     auth(USER_ROLE.admin, USER_ROLE.user),
     validateRequest(updatePostValidationSchema),
     PostController.updatePostById,

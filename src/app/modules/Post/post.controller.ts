@@ -39,8 +39,8 @@ const getAllPosts = catchAsync(async (req, res) => {
 });
 
 const updatePostById = catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const result = await PostService.updatePostById(id, req.body);
+    const id = req.params.postId;
+    const result = await PostService.updatePostById(req.body, id);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,

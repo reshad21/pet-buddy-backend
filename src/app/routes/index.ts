@@ -4,6 +4,7 @@ import { CommentRoutes } from '../modules/Comment/comment.route';
 import { PostRoutes } from '../modules/Post/post.route';
 import { UserRoutes } from '../modules/User/user.route';
 import { VoteRoutes } from '../modules/Vote/vote.route';
+import { orderRoutes } from '../modules/order/order.routes';
 
 type TModuleRoutes = {
   path: string;
@@ -32,6 +33,10 @@ const moduleRoutes: TModuleRoutes[] = [
   {
     path: '/vote',
     route: VoteRoutes,
+  },
+  {
+    path: '/order',
+    route: orderRoutes,
   },
 ];
 

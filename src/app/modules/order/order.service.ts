@@ -3,6 +3,7 @@ import { Post } from '../Post/post.model';
 import Order from './order.model';
 
 const createOrder = async (orderData: any) => {
+    console.log("get data from backend when call appi->", orderData);
     const { user, article } = orderData; // Directly destructure the single article
 
     // Fetch the article details

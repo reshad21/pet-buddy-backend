@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { initiatePayment } from '../payment/payment.utils';
 import { Post } from '../Post/post.model';
 import Order from './order.model';
 
@@ -34,9 +35,23 @@ const createOrder = async (orderData: any) => {
         transactionId,
     });
 
+
     await order.save();
 
-    return order;
+    const paymentData = {
+        transactionId,
+        totalPrice,
+        customerName: orderData.user.name,
+        customerEmail: orderData.user.email,
+        customerPhone: orderData.user.mobileNumber,
+        // customerAddress: "no need",
+    }
+
+    //payment
+    const paymentSession = await initiatePayment(paymentData);
+    console.log(paymentSession);
+
+    return paymentSession;
 };
 
 export const orderService = {

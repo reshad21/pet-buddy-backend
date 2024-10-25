@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status';
 import config from '../../config';
 import AppError from '../../errors/AppError';
 
 import bcryptJs from 'bcryptjs';
+import { JwtPayload } from 'jsonwebtoken';
 import { User } from '../User/user.model';
 import { USER_ROLE } from '../User/user.utils';
 import { TLoginUser } from './auth.interface';
@@ -11,16 +13,23 @@ import { createToken, verifyToken } from './auth.utils';
 const loginUser = async (payload: TLoginUser) => {
   // checking if the user exists
   const user = await User.findOne({ email: payload.email });
-  console.log("login user information--->", user);
+  // console.log("login user information--->", user);
 
   if (!user) {
     throw new Error('User does not exist');
+  }
+
+  const isPasswordMatch = await bcryptJs.compare(payload.password, user?.password);
+
+  if (!isPasswordMatch) {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'password is incorrect');
   }
 
   const jwtPayload = {
     _id: user._id,
     name: user.name,
     email: user.email,
+    password: user.password,
     mobileNumber: user.mobileNumber,
     img: user.img,
     role: user.role,
@@ -120,8 +129,52 @@ const registerUser = async (userData: TLoginUser) => {
   };
 };
 
+const changePassword = async (payload: { oldPassword: string, newPassword: string }, userData: JwtPayload) => {
+
+  // step 1: checking if the user exists
+  const user = await User.findById(userData._id);
+  // console.log("FInd user information db--->", user);
+
+  if (!user) {
+    throw new Error('User does not exist');
+  }
+
+  // Step 2: Check if the provided old password matches the stored password
+  const isPasswordMatch = await bcryptJs.compare(payload.oldPassword, user?.password);
+
+  if (!isPasswordMatch) {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'Old password is incorrect');
+  }
+
+  // Step 3: Hash the new password
+  const hashedNewPassword = await bcryptJs.hash(payload.newPassword, Number(config.bcrypt_salt_rounds));
+
+  // Step 4: Update the user's password in the database
+  // user.password = hashedNewPassword;
+  // await user.save();
+
+
+  // return {
+  //   message: 'Password changed successfully',
+  // };
+
+  await User.findOneAndUpdate({
+    _id: user._id,
+    role: user.role,
+  },
+    {
+      password: hashedNewPassword,
+      //  needPasswordChange:false,
+      passwordChangedAt: new Date()
+    }
+  );
+
+  return null;
+}
+
 export const AuthServices = {
   loginUser,
   refreshToken,
   registerUser,
+  changePassword
 };

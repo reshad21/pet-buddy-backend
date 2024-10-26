@@ -61,7 +61,7 @@ const changePassword = catchAsync(async (req, res) => {
     message: 'password update successfully!',
     data: result,
   });
-})
+});
 
 export const AuthControllers = {
   loginUser,

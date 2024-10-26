@@ -13,7 +13,7 @@ import { createToken, verifyToken } from './auth.utils';
 const loginUser = async (payload: TLoginUser) => {
   // checking if the user exists
   const user = await User.findOne({ email: payload.email });
-  // console.log("login user information--->", user);
+  // console.log("login user information from db--->", user);
 
   if (!user) {
     throw new Error('User does not exist');
@@ -57,7 +57,6 @@ const loginUser = async (payload: TLoginUser) => {
     refreshToken,
   };
 };
-
 
 const refreshToken = async (token: string) => {
   // checking if the given token is valid

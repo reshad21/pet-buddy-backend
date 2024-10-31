@@ -182,7 +182,7 @@ const forgetPassword = async (userEmail: string) => {
   );
 
 
-  const resetUILink = `${config.reset_password_ui_link}?email=${user.email}&token=${resetToken}`;
+  const resetUILink = `${config.reset_password_ui_link}/reset-password?email=${user.email}&token=${resetToken}`;
 
 
   sendEmail(user.email, resetUILink);
@@ -190,8 +190,6 @@ const forgetPassword = async (userEmail: string) => {
 }
 
 const resetPassword = async (payload: { email: string, newPassword: string }, token: any) => {
-  console.log("--->", payload);
-  console.log("--->", token);
   // checking if the user exists
   const user = await User.findOne({ email: payload.email });
 
@@ -201,8 +199,6 @@ const resetPassword = async (payload: { email: string, newPassword: string }, to
 
   // checking if the given token is valid
   const decoded = verifyToken(token, config.jwt_access_secret as string);
-
-  console.log("decoded for reset services--->", decoded);
 
   if (payload.email !== decoded.email) {
     throw new AppError(httpStatus.FORBIDDEN, "You are forbidden")

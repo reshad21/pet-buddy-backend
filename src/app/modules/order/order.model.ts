@@ -4,7 +4,7 @@ interface IOrder extends Document {
     user: {
         name: string;
         email: string;
-        phone: string;
+        mobileNumber: string;
         profilePhoto: string;
     };
     products: Array<{

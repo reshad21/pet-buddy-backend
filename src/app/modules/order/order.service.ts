@@ -4,7 +4,7 @@ import { Post } from '../Post/post.model';
 import Order from './order.model';
 
 const createOrder = async (orderData: any) => {
-    console.log("get data from frontend ->", orderData);
+    // console.log("get data from frontend ->", orderData);
     const { user, article } = orderData; // Keep 'article' as per frontend data
 
     // Fetch the article details from the database
@@ -38,6 +38,7 @@ const createOrder = async (orderData: any) => {
 
     await order.save();
 
+    //payment gateway work start here
     const paymentData = {
         transactionId,
         totalPrice,
@@ -49,7 +50,7 @@ const createOrder = async (orderData: any) => {
 
     //payment
     const paymentSession = await initiatePayment(paymentData);
-    console.log(paymentSession);
+    // console.log(paymentSession);
 
     return paymentSession;
 };

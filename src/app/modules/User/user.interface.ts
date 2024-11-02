@@ -12,6 +12,7 @@ export interface IUser extends Document {
   followers?: Types.ObjectId[];
   following?: Types.ObjectId[];
   posts?: Types.ObjectId[];
+  purchasedContent?: Types.ObjectId[];
   passwordChangedAt?: Date;
   mobileNumber?: string;
 }

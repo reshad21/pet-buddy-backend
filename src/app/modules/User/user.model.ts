@@ -55,6 +55,12 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
       ref: 'Post', // Reference to the Post model
     },
   ],
+  purchasedContent: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Order', // Reference to the Post model
+    },
+  ],
 });
 
 // Create and export User model

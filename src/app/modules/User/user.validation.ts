@@ -13,6 +13,7 @@ export const createUserValidationSchema = z.object({
     followers: z.array(z.string()).optional(), // Array of follower IDs (strings)
     following: z.array(z.string()).optional(), // Array of following IDs (strings)
     posts: z.array(z.string()).optional(), // Array of post IDs (strings)
+    purchasedContent: z.array(z.string()).optional(), // Array of post IDs (strings)
   }),
 });
 

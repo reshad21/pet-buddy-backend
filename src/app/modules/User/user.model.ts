@@ -57,8 +57,8 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
   ],
   purchasedContent: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Order', // Reference to the Post model
+      _id: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' }, // Reference to the Order model
+      isPremium: { type: Boolean, default: false },
     },
   ],
 });

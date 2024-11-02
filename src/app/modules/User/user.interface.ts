@@ -12,7 +12,10 @@ export interface IUser extends Document {
   followers?: Types.ObjectId[];
   following?: Types.ObjectId[];
   posts?: Types.ObjectId[];
-  purchasedContent?: Types.ObjectId[];
+  purchasedContent?: {
+    _id: Types.ObjectId; // Reference to the Order model
+    isPremium: boolean;
+  }[];
   passwordChangedAt?: Date;
   mobileNumber?: string;
 }

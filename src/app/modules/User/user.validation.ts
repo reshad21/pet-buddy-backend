@@ -13,7 +13,12 @@ export const createUserValidationSchema = z.object({
     followers: z.array(z.string()).optional(), // Array of follower IDs (strings)
     following: z.array(z.string()).optional(), // Array of following IDs (strings)
     posts: z.array(z.string()).optional(), // Array of post IDs (strings)
-    purchasedContent: z.array(z.string()).optional(), // Array of post IDs (strings)
+    purchasedContent: z.array(
+      z.object({
+        _id: z.string(), // ID of the order
+        isPremium: z.boolean().optional().default(false), // Boolean indicating premium status
+      })
+    ).optional(),
   }),
 });
 

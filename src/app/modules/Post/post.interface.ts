@@ -6,7 +6,7 @@ export interface IPost extends Document {
     title: string;
     postImage: string;
     content: string;
-    category: 'Tip' | 'Story';
+    category: 'tip' | 'story';
     isPremium: boolean;
     images: string[];
     upvotes: number;

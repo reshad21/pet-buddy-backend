@@ -8,7 +8,7 @@ export interface IUser extends Document {
   name: string;
   img?: string;
   role: 'user' | 'admin';
-  status: 'normal' | 'premium';
+  status: boolean;
   followers?: Types.ObjectId[];
   following?: Types.ObjectId[];
   posts?: Types.ObjectId[];

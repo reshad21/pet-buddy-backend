@@ -20,6 +20,10 @@ const loginUser = async (payload: TLoginUser) => {
     throw new Error('User does not exist');
   }
 
+  if (user?.status) {
+    throw new Error('You are blocked by Admin!');
+  }
+
   const isPasswordMatch = await bcryptJs.compare(payload.password, user?.password);
 
   if (!isPasswordMatch) {

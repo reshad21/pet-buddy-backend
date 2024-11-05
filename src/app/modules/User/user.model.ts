@@ -33,9 +33,8 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
     default: 'user',
   },
   status: {
-    type: String,
-    enum: ['normal', 'premium'],
-    default: 'normal',
+    type: Boolean,
+    default: false,
   },
   followers: [
     {

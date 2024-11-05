@@ -9,7 +9,7 @@ export const createUserValidationSchema = z.object({
     img: z.string().url('Invalid URL').optional(), // Optional URL validation
     mobileNumber: z.string().optional(),
     role: z.enum(['user', 'admin']).optional(),
-    status: z.enum(['normal', 'premium']).optional(),
+    status: z.boolean().optional().default(false).optional(),
     followers: z.array(z.string()).optional(), // Array of follower IDs (strings)
     following: z.array(z.string()).optional(), // Array of following IDs (strings)
     posts: z.array(z.string()).optional(), // Array of post IDs (strings)
@@ -32,7 +32,7 @@ export const updateUserValidationSchema = z.object({
     img: z.string().url('Invalid URL').optional(),
     mobileNumber: z.string().optional(),
     role: z.enum(['user', 'admin']).optional(),
-    status: z.enum(['normal', 'premium']).optional(),
+    status: z.boolean().optional().default(false).optional(),
     followers: z.array(z.string()).optional(), // Array of follower IDs (optional)
     following: z.array(z.string()).optional(), // Array of following IDs (optional)
     posts: z.array(z.string()).optional(), // Array of post IDs (optional)

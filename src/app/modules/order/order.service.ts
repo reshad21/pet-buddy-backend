@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import QueryBuilder from '../../builder/QueryBuilder';
 import { initiatePayment } from '../payment/payment.utils';
 import { Post } from '../Post/post.model';
-import Order from './order.model';
+import { default as Order, default as orderModel } from './order.model';
 
 const createOrder = async (orderData: any) => {
     // console.log("get data from frontend ->", orderData);
@@ -55,6 +56,25 @@ const createOrder = async (orderData: any) => {
     return paymentSession;
 };
 
+
+export const OrderSearchableFields = ['name, email'];
+export const getOrder = async (query: Record<string, unknown>) => {
+    const userQuery = new QueryBuilder(orderModel.find(), query)
+        .search(OrderSearchableFields)
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+
+    const result = await userQuery.modelQuery;
+    const metaData = await userQuery.countTotal();
+    return {
+        meta: metaData,
+        data: result,
+    };
+}
+
 export const orderService = {
     createOrder,
+    getOrder,
 };

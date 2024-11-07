@@ -17,11 +17,12 @@ const loginUser = async (payload: TLoginUser) => {
   // console.log("login user information from db--->", user);
 
   if (!user) {
-    throw new Error('User does not exist');
+    // throw new Error('User does not exist');
+    throw new AppError(httpStatus.NOT_FOUND,"User does not exist!");
   }
 
   if (user?.status) {
-    throw new Error('You are blocked by Admin!');
+    throw new AppError(httpStatus.UNAUTHORIZED,"User is blocked!");
   }
 
   const isPasswordMatch = await bcryptJs.compare(payload.password, user?.password);
@@ -137,9 +138,11 @@ const changePassword = async (payload: { oldPassword: string, newPassword: strin
 
   // step 1: checking if the user exists
   const user = await User.findById(userData._id);
+
   if (!user) {
-    throw new Error('User does not exist');
+    throw new AppError(httpStatus.NOT_FOUND,"User does not exist!");
   }
+
   // Step 2: Check if the provided old password matches the stored password
   const isPasswordMatch = await bcryptJs.compare(payload.oldPassword, user?.password);
 
@@ -169,7 +172,7 @@ const forgetPassword = async (userEmail: string) => {
   const user = await User.findOne({ email: userEmail });
 
   if (!user) {
-    throw new Error('User does not exist');
+    throw new AppError(httpStatus.NOT_FOUND,"User does not exist!");
   }
 
   const jwtPayload = {
@@ -198,7 +201,7 @@ const resetPassword = async (payload: { email: string, newPassword: string }, to
   const user = await User.findOne({ email: payload.email });
 
   if (!user) {
-    throw new Error('User does not exist');
+    throw new AppError(httpStatus.NOT_FOUND,"User does not exist!");
   }
 
   // checking if the given token is valid

@@ -1,23 +1,21 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { readFileSync } from "fs";
 import { Types } from "mongoose";
 import { join } from "path";
 import orderModel from "../order/order.model";
-import { User } from "../User/user.model";
+import { Post } from "../Post/post.model";  // Assuming you have a Post model where `isPremium` is located
 import { verifyPayment } from "./payment.utils";
 
-const confirmationService = async (transactionId: string, status: string) => {
+const confirmationService = async (transactionId: string, status: string): Promise<string> => {
     const verifyResponse = await verifyPayment(transactionId);
     let result;
     let message = "";
 
     if (verifyResponse && verifyResponse.pay_status === "Successful") {
+        // Update the order with payment status as "Paid"
         result = await orderModel.findOneAndUpdate(
             { transactionId },
             { paymentStatus: "Paid" },
-            { new: true } // Ensure you get the updated document back
+            { new: true }
         );
 
         if (!result) {
@@ -29,46 +27,26 @@ const confirmationService = async (transactionId: string, status: string) => {
 
         // Ensure result.products is defined and is an array
         if (result.products && Array.isArray(result.products)) {
-            const user = await User.findOne({
-                $or: [
-                    { name: result.user.name },
-                    { email: result.user.email },
-                    { mobileNumber: result.user.mobileNumber }
-                ]
-            });
+            // Iterate over the products in the order
+            for (const product of result.products) { 
+                // Ensure product.product is treated as an ObjectId
+                const productId = product.product instanceof Types.ObjectId
+                    ? product.product // If it's already an ObjectId, use it
+                    : new Types.ObjectId(product.product as unknown as string); // If it's not, create a new ObjectId
 
-            if (user) {
-                console.log("User found successfully -->", user);
-
-                // Initialize purchasedContent if undefined
-                if (!user.purchasedContent) user.purchasedContent = [];
-
-                // Ensure each product in result.products is in purchasedContent
-                result.products.forEach((product) => {
-                    const productId = product.product as unknown as Types.ObjectId; // Ensure productId is of type ObjectId
-                    const productIdString = productId.toString();
-                    const postExists = user.purchasedContent?.some(
-                        (post) => post._id.toString() === productIdString
-                    );
-
-                    if (!postExists) {
-                        // Add the post if it doesn't exist in purchasedContent
-                        user.purchasedContent?.push({
-                            _id: productId, // Directly use productId of type ObjectId
-                            isPremium: false, // Set initial isPremium to false
-                        });
-                    }
-                });
-
-                // Save the updated user document
-                await user.save();
-                console.log("Updated user purchasedContent:", user.purchasedContent);
+                // Update the 'isPremium' field in the Post model
+                await Post.findOneAndUpdate(
+                    { _id: productId },   // Find the post by productId
+                    { isPremium: false },  // Update the isPremium field to false
+                    { new: true }          // Return the updated document
+                );
             }
         }
     } else {
         message = "Payment Failed!";
     }
 
+    // Path to confirmation template file
     const filePath = join(__dirname, "../../../../public/confirmation.html");
     let template = readFileSync(filePath, "utf-8");
     template = template.replace("{{message}}", message);

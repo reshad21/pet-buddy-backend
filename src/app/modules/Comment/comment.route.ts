@@ -15,6 +15,11 @@ router.post(
     CommentController.createComment
 );
 
+router.get(
+    '/:postId',
+    CommentController.getComment
+);
+
 
 
 

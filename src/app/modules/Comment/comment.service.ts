@@ -45,6 +45,16 @@ const createCommentIntoDB = async (comment: IComment, postId: string) => {
     }
 };
 
+
+const getComment = async (postId: string) => {
+    try {
+        const comment = await Comment.find({ post: postId });
+        return comment;
+    } catch (error) {
+        throw new Error('Could not retrieve the total number of comments');
+    }
+};
+
 export const CommentService = {
-    createCommentIntoDB,
+    createCommentIntoDB,getComment
 };
